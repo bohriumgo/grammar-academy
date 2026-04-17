@@ -1,7 +1,11 @@
-import { useState, useEffect, createContext, useContext } from 'react'
+import { useState, useEffect, createContext, useContext, useCallback } from 'react'
 import { Routes, Route, Navigate, Link, useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabase'
 import Admin from './pages/Admin'
+import Dashboard from './pages/Dashboard'
+import Lesson from './pages/Lesson'
+import CourseMap from './pages/CourseMap'
+import './learn.css'
 
 const AuthContext = createContext(null)
 export const useAuth = () => useContext(AuthContext)
@@ -12,6 +16,19 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
+
+  const loadProfile = useCallback(async (userId) => {
+    const { data } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single()
+    setProfile(data)
+  }, [])
+
+  const reloadProfile = useCallback(async () => {
+    if (user?.id) await loadProfile(user.id)
+  }, [user, loadProfile])
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -25,78 +42,58 @@ function AuthProvider({ children }) {
       else setProfile(null)
     })
     return () => subscription.unsubscribe()
-  }, [])
+  }, [loadProfile])
 
-  async function loadProfile(uid) {
-    const { data } = await supabase.from('profiles').select('*').eq('id', uid).single()
-    setProfile(data)
-  }
-
-  const isAdmin = user?.email === ADMIN_EMAIL
-
-  if (loading) return <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'100vh',color:'#9c9b95'}}>Loading...</div>
+  const isAdmin = !!(user && ADMIN_EMAIL && user.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase())
 
   return (
-    <AuthContext.Provider value={{ user, profile, isAdmin, loadProfile }}>
+    <AuthContext.Provider value={{ user, profile, loading, isAdmin, reloadProfile }}>
       {children}
     </AuthContext.Provider>
   )
 }
 
+// ─── Auth page (login/signup) ───
 function AuthPage({ mode }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [err, setErr] = useState('')
+  const [busy, setBusy] = useState(false)
   const navigate = useNavigate()
 
-  async function handleSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault()
-    setError('')
-    setLoading(true)
+    setErr(''); setBusy(true)
     try {
       if (mode === 'signup') {
-        const { error } = await supabase.auth.signUp({
-          email, password,
-          options: { data: { display_name: name } }
-        })
+        const { error } = await supabase.auth.signUp({ email, password })
         if (error) throw error
-        navigate('/admin')
+        setErr('Check your email to confirm your account, then sign in.')
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
         if (error) throw error
-        navigate('/admin')
+        navigate('/learn')
       }
-    } catch (err) {
-      setError(err.message)
+    } catch (e) {
+      setErr(e.message)
+    } finally {
+      setBusy(false)
     }
-    setLoading(false)
   }
 
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1>{mode === 'signup' ? 'Create account' : 'Welcome back'}</h1>
-        <p>{mode === 'signup' ? 'Start your grammar journey' : 'Sign in to continue'}</p>
-        {error && <div className="alert alert-error">{error}</div>}
-        <form onSubmit={handleSubmit}>
-          {mode === 'signup' && (
-            <div className="form-group">
-              <label>Name</label>
-              <input type="text" value={name} onChange={e => setName(e.target.value)} required />
-            </div>
-          )}
-          <div className="form-group">
-            <label>Email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
-          </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} required minLength={6} />
-          </div>
-          <button type="submit" className="btn btn-primary" style={{width:'100%',justifyContent:'center'}} disabled={loading}>
-            {loading ? 'Please wait...' : mode === 'signup' ? 'Create account' : 'Sign in'}
+        <h1>{mode === 'signup' ? 'Create your account' : 'Sign in'}</h1>
+        <p>{mode === 'signup' ? 'Start learning German grammar, the scientific way.' : 'Welcome back.'}</p>
+        {err && <div className="auth-error">{err}</div>}
+        <form onSubmit={onSubmit}>
+          <label>Email</label>
+          <input type="email" required value={email} onChange={e => setEmail(e.target.value)} />
+          <label style={{marginTop:12}}>Password</label>
+          <input type="password" required minLength={6} value={password} onChange={e => setPassword(e.target.value)} />
+          <button type="submit" className="btn btn-primary" style={{marginTop:16,width:'100%'}} disabled={busy}>
+            {busy ? 'Please wait...' : mode === 'signup' ? 'Create account' : 'Sign in'}
           </button>
         </form>
         <p style={{textAlign:'center',marginTop:16,fontSize:13}}>
@@ -135,20 +132,9 @@ function Landing() {
   )
 }
 
-function LearnPlaceholder() {
-  const { user } = useAuth()
-  if (!user) return <Navigate to="/login" />
-  return (
-    <div style={{maxWidth:600,margin:'80px auto',textAlign:'center'}}>
-      <h1 style={{fontSize:24,marginBottom:12}}>Student app coming soon</h1>
-      <p style={{color:'#6b6a65',marginBottom:24}}>The learning experience is being built. For now, use the admin panel to add course content.</p>
-      <Link to="/admin" className="btn btn-primary">Go to admin panel</Link>
-    </div>
-  )
-}
-
 function ProtectedAdmin() {
-  const { user, isAdmin } = useAuth()
+  const { user, isAdmin, loading } = useAuth()
+  if (loading) return null
   if (!user) return <Navigate to="/login" />
   if (!isAdmin) return (
     <div style={{maxWidth:500,margin:'80px auto',textAlign:'center'}}>
@@ -166,7 +152,9 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<AuthPage mode="login" />} />
         <Route path="/signup" element={<AuthPage mode="signup" />} />
-        <Route path="/learn" element={<LearnPlaceholder />} />
+        <Route path="/learn" element={<Dashboard />} />
+        <Route path="/learn/map" element={<CourseMap />} />
+        <Route path="/learn/topic/:id" element={<Lesson />} />
         <Route path="/admin/*" element={<ProtectedAdmin />} />
       </Routes>
     </AuthProvider>

@@ -1,0 +1,229 @@
+/* ============================================
+   Grammar Academy — Student app styles
+   Layered on top of index.css. Reuses its vars.
+   ============================================ */
+
+/* ----- Student shell ----- */
+.student-shell { min-height: 100vh; background: var(--bg); }
+.student-header {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+}
+.student-header-inner {
+  max-width: 1100px; margin: 0 auto; padding: 14px 32px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.student-logo {
+  font-size: 16px; font-weight: 700; color: var(--accent-dark); text-decoration: none;
+}
+.student-logo:hover { text-decoration: none; }
+.student-header-stats {
+  display: flex; align-items: center; gap: 20px;
+}
+.student-stat { line-height: 1.2; }
+.student-stat-label {
+  font-size: 11px; color: var(--text-3); text-transform: uppercase;
+  letter-spacing: 0.5px; font-weight: 600;
+}
+.student-stat-value { font-size: 14px; font-weight: 600; color: var(--text); }
+.student-main { max-width: 1100px; margin: 0 auto; padding: 32px; }
+
+/* ----- Buttons ----- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 16px; border-radius: var(--radius); font-size: 14px; font-weight: 500;
+  background: var(--bg-card); color: var(--text); border: 1px solid var(--border);
+  cursor: pointer; transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+  text-decoration: none; font-family: inherit;
+}
+.btn:hover { background: var(--bg-surface); text-decoration: none; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+}
+.btn-primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+.btn-ghost { background: transparent; border-color: transparent; color: var(--text-2); }
+.btn-ghost:hover { background: var(--bg-surface); color: var(--text); }
+.btn-large { padding: 12px 28px; font-size: 16px; }
+
+.muted { color: var(--text-2); }
+
+/* ----- Dashboard ----- */
+.dashboard-header { margin-bottom: 32px; }
+.dashboard-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+
+.task-section { margin-bottom: 40px; }
+.task-section-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 16px; gap: 12px;
+}
+.task-section-header h2 { font-size: 18px; font-weight: 600; }
+
+.task-grid {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+.task-card {
+  display: flex; flex-direction: column; gap: 10px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 18px; text-align: left; cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  font-family: inherit;
+}
+.task-card:hover {
+  border-color: var(--accent); transform: translateY(-1px); box-shadow: var(--shadow);
+}
+.task-card-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.task-card-tag {
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;
+  padding: 3px 8px; border-radius: 4px;
+}
+.task-card-kind {
+  font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;
+  font-weight: 600;
+}
+.task-card-title { font-size: 16px; font-weight: 600; color: var(--text); }
+.task-card-desc { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+.task-card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: auto; padding-top: 8px; border-top: 1px solid var(--border);
+  font-size: 12px; color: var(--text-3);
+}
+.task-card-xp { color: var(--accent-dark); font-weight: 600; }
+
+.empty-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 32px; text-align: center;
+}
+.empty-card h2 { font-size: 18px; margin-bottom: 8px; }
+
+/* ----- Lesson ----- */
+.lesson-topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+}
+.lesson-topic-title { font-size: 20px; font-weight: 700; }
+.lesson-topbar-meta { display: flex; gap: 6px; }
+.kp-dot {
+  width: 10px; height: 10px; border-radius: 50%; background: var(--border-2);
+}
+.kp-dot.done { background: var(--accent); }
+.kp-dot.current { background: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+.kp-dot.future { background: var(--border); }
+
+.worked-example {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 32px; max-width: 720px;
+}
+.kp-progress {
+  font-size: 12px; color: var(--text-3); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+}
+.kp-title { font-size: 24px; font-weight: 700; margin-bottom: 20px; }
+.worked-section { margin-bottom: 18px; }
+.worked-section-label {
+  font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;
+  font-weight: 600; margin-bottom: 6px;
+}
+.worked-section-body { font-size: 15px; line-height: 1.6; color: var(--text); }
+.worked-example-text { font-style: italic; color: var(--text); background: var(--bg-surface); padding: 12px 14px; border-radius: var(--radius); border-left: 3px solid var(--accent); }
+.worked-note {
+  background: var(--warning-light); color: #6b4a00; border-radius: var(--radius);
+  padding: 12px 14px; font-size: 14px; margin: 16px 0 24px;
+}
+
+/* ----- Practice ----- */
+.practice-area { max-width: 720px; }
+.question-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 28px; margin-top: 8px;
+}
+.question-prompt { font-size: 18px; line-height: 1.5; margin-bottom: 20px; color: var(--text); }
+.question-options { display: grid; gap: 10px; }
+.option-btn {
+  display: block; width: 100%; text-align: left; padding: 14px 18px;
+  background: var(--bg-card); border: 1px solid var(--border-2); border-radius: var(--radius);
+  font-size: 15px; cursor: pointer; font-family: inherit; color: var(--text);
+  transition: border-color 0.15s, background 0.15s;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-light); }
+.option-btn:disabled { opacity: 0.6; cursor: default; }
+.option-btn.selected { border-color: var(--accent); background: var(--accent-light); }
+
+.question-input-form { display: flex; gap: 10px; }
+.question-input-form input {
+  flex: 1; padding: 12px 14px; border: 1px solid var(--border-2); border-radius: var(--radius);
+  font-size: 16px; font-family: inherit; background: var(--bg-card); color: var(--text);
+}
+.question-input-form input:focus { outline: none; border-color: var(--accent); }
+
+.feedback-box {
+  padding: 16px 18px; border-radius: var(--radius); margin-top: 16px; font-size: 14px;
+}
+.feedback-correct { background: var(--success-light); color: var(--accent-dark); }
+.feedback-incorrect { background: var(--danger-light); color: var(--danger); }
+.feedback-headline { font-weight: 600; margin-bottom: 6px; font-size: 15px; }
+.feedback-explanation { color: var(--text); opacity: 0.85; margin-top: 4px; line-height: 1.5; }
+.feedback-hint { font-size: 13px; color: var(--text-2); margin-top: 8px; font-style: italic; }
+
+/* ----- Celebration ----- */
+.celebration {
+  max-width: 540px; margin: 40px auto; text-align: center;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 48px 32px;
+}
+.celebration-emoji { font-size: 56px; margin-bottom: 16px; }
+.celebration h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; color: var(--accent-dark); }
+
+/* ----- Course map ----- */
+.map-header { margin-bottom: 24px; }
+.map-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+
+.map-legend {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  margin-bottom: 24px; font-size: 12px; color: var(--text-2);
+}
+.map-legend-item { display: flex; align-items: center; gap: 6px; }
+.map-swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+.map-tiers { display: flex; flex-direction: column; gap: 20px; }
+.map-tier {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 18px;
+}
+.map-tier-label {
+  font-size: 12px; font-weight: 600; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px;
+}
+.map-tier-topics { display: flex; flex-wrap: wrap; gap: 8px; }
+.map-topic {
+  padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+  border: 1px solid; cursor: pointer; font-family: inherit;
+  transition: transform 0.15s;
+}
+.map-topic:hover:not(:disabled) { transform: translateY(-1px); }
+.map-topic:disabled { cursor: not-allowed; opacity: 0.7; }
+
+.map-s-mastered { background: var(--success-light); color: var(--accent-dark); border-color: var(--accent); }
+.map-s-in_progress { background: var(--purple-light); color: var(--purple); border-color: var(--purple); }
+.map-s-available { background: var(--bg-card); color: var(--text); border-color: var(--accent); }
+.map-s-locked { background: var(--bg-surface); color: var(--text-3); border-color: var(--border); }
+
+.map-swatch.map-s-mastered { background: var(--accent); border: 1px solid var(--accent); }
+.map-swatch.map-s-in_progress { background: var(--purple); }
+.map-swatch.map-s-available { background: var(--bg-card); border: 1px solid var(--accent); }
+.map-swatch.map-s-locked { background: var(--border-2); }
+
+/* ----- Responsive ----- */
+@media (max-width: 768px) {
+  .student-header-inner { padding: 12px 16px; flex-wrap: wrap; }
+  .student-header-stats { gap: 12px; }
+  .student-main { padding: 20px 16px; }
+  .lesson-topbar { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .worked-example, .question-card { padding: 20px; }
+  .kp-title { font-size: 20px; }
+  .question-input-form { flex-direction: column; }
+  .task-grid { grid-template-columns: 1fr; }
+}
