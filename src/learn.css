@@ -227,3 +227,105 @@
   .question-input-form { flex-direction: column; }
   .task-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================
+   Grammar Academy — Course map SVG graph styles
+   Append this to the bottom of learn.css
+   ============================================ */
+
+.map-graph-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-top: 4px;
+}
+.map-graph-svg { display: block; min-width: 960px; }
+
+.map-tier-label-svg {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.map-node-g rect {
+  stroke-width: 1;
+  transition: transform 0.15s, filter 0.15s, stroke 0.15s;
+}
+.map-node-g.clickable { cursor: pointer; }
+.map-node-g.clickable:hover rect { filter: brightness(0.97); }
+
+.map-node-label {
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Status-based node fills — reuse the status colors from the block view */
+.map-node-g.map-s-mastered rect    { fill: var(--success-light); stroke: var(--accent); }
+.map-node-g.map-s-mastered .map-node-label { fill: var(--accent-dark); }
+
+.map-node-g.map-s-in_progress rect { fill: var(--purple-light); stroke: var(--purple); }
+.map-node-g.map-s-in_progress .map-node-label { fill: var(--purple); }
+
+.map-node-g.map-s-available rect   { fill: var(--bg-card); stroke: var(--accent); }
+.map-node-g.map-s-available .map-node-label { fill: var(--text); }
+
+.map-node-g.map-s-locked rect      { fill: var(--bg-surface); stroke: var(--border-2); }
+.map-node-g.map-s-locked .map-node-label { fill: var(--text-3); }
+
+@media (max-width: 768px) {
+  .map-graph-wrap { padding: 8px; }
+}
+
+/* ----- Import page ----- */
+.import-page {
+  max-width: 1200px; margin: 0 auto; padding: 32px 24px;
+}
+.import-header {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 24px;
+}
+.import-header h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+.import-grid {
+  display: grid; gap: 20px;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+}
+@media (max-width: 900px) { .import-grid { grid-template-columns: 1fr; } }
+.import-textarea {
+  width: 100%; height: 420px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px; line-height: 1.5; padding: 14px;
+  background: var(--bg-card); border: 1px solid var(--border-2); border-radius: var(--radius);
+  resize: vertical; color: var(--text);
+}
+.import-textarea:focus { outline: none; border-color: var(--accent); }
+.import-error {
+  background: var(--danger-light); color: var(--danger); padding: 10px 12px;
+  border-radius: var(--radius); margin-top: 10px; font-size: 13px;
+}
+.import-log {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px; line-height: 1.5; min-height: 180px; max-height: 300px; overflow-y: auto;
+}
+.import-log-line { color: var(--text-2); padding: 1px 0; }
+.import-log-success { color: var(--success); font-weight: 500; }
+.import-log-error { color: var(--danger); }
+.import-help {
+  margin-top: 16px; background: var(--bg-surface); border-radius: var(--radius);
+  padding: 14px 16px; font-size: 13px; line-height: 1.5; color: var(--text-2);
+}
+.import-help h3 { font-size: 13px; color: var(--text); margin-bottom: 6px; }
+.import-help ul { margin: 6px 0 0 18px; padding: 0; }
+.import-help li { margin-bottom: 4px; }
+.import-help code {
+  background: var(--bg-card); padding: 1px 5px; border-radius: 3px;
+  font-size: 12px; border: 1px solid var(--border);
+}
+
