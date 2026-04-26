@@ -5,6 +5,7 @@ import Admin from './pages/Admin'
 import Dashboard from './pages/Dashboard'
 import Lesson from './pages/Lesson'
 import CourseMap from './pages/CourseMap'
+import Import from './pages/Import'
 import './learn.css'
 
 const AuthContext = createContext(null)
@@ -53,7 +54,6 @@ function AuthProvider({ children }) {
   )
 }
 
-// ─── Auth page (login/signup) ───
 function AuthPage({ mode }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -85,7 +85,7 @@ function AuthPage({ mode }) {
     <div className="auth-page">
       <div className="auth-card">
         <h1>{mode === 'signup' ? 'Create your account' : 'Sign in'}</h1>
-        <p>{mode === 'signup' ? 'Start learning German grammar, the scientific way.' : 'Welcome back.'}</p>
+        <p>{mode === 'signup' ? 'Master German grammar, the scientific way.' : 'Welcome back.'}</p>
         {err && <div className="auth-error">{err}</div>}
         <form onSubmit={onSubmit}>
           <label>Email</label>
@@ -113,7 +113,7 @@ function Landing() {
     <div className="landing">
       <div className="hero">
         <h1>Master German Grammar.<br/>The Scientific Way.</h1>
-        <p>An adaptive learning platform based on cognitive science. Worked examples, spaced repetition, and mastery-based progression — built from Grammatik aktiv and Hammer's German Grammar.</p>
+        <p>Go from absolute beginner to independent speaker. Forty topics from A1 to B1, built on decades of research in how adults actually acquire German. Worked examples, spaced repetition, and mastery-based progression.</p>
         <div style={{display:'flex',gap:12,justifyContent:'center'}}>
           {user ? (
             <>
@@ -145,6 +145,14 @@ function ProtectedAdmin() {
   return <Admin />
 }
 
+function ProtectedImport() {
+  const { user, isAdmin, loading } = useAuth()
+  if (loading) return null
+  if (!user) return <Navigate to="/login" />
+  if (!isAdmin) return <Navigate to="/admin" />
+  return <Import />
+}
+
 export default function App() {
   return (
     <AuthProvider>
@@ -155,6 +163,7 @@ export default function App() {
         <Route path="/learn" element={<Dashboard />} />
         <Route path="/learn/map" element={<CourseMap />} />
         <Route path="/learn/topic/:id" element={<Lesson />} />
+        <Route path="/admin/import" element={<ProtectedImport />} />
         <Route path="/admin/*" element={<ProtectedAdmin />} />
       </Routes>
     </AuthProvider>
